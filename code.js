@@ -43,5 +43,30 @@ function processJson() {
 function processXML() {
     const xmlDoc = ajax.responseXML;
 
-    document.getElementById("tableBody").innerHTML = 1;
+    const items = xmlDoc.getElementsByTagName("item");
+    let trs = "";
+
+    for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        const name = item.getElementsByTagName("name")[0].textContent;
+        const price = item.getElementsByTagName("price")[0].textContent;
+        const quantity = item.getElementsByTagName("quantity")[0].textContent;
+        const quality = item.getElementsByTagName("quality")[0].textContent;
+        const vendor = item.getElementsByTagName("vendor")[0].textContent;
+        const category = item.getElementsByTagName("category")[0].textContent;
+
+        const row = `
+            <tr>
+                <td>${name}</td>
+                <td>${price}</td>
+                <td>${quantity}</td>
+                <td>${quality}</td>
+                <td>${vendor}</td>
+                <td>${category}</td>
+            </tr>
+        `;
+        trs += row;
+    }
+
+    document.getElementById("tableBody").innerHTML = trs;
 }

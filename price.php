@@ -1,8 +1,8 @@
 <?php
 include("connect.php");
 
-$minPrice = $_GET["minPrice"];
-$maxPrice = $_GET["maxPrice"];
+$minPrice = $_POST["minPrice"];
+$maxPrice = $_POST["maxPrice"];
 
 $SELECT = "SELECT items.name, items.price, items.quantity, items.quality,vendors.v_name as vendor, category.c_name as category FROM items
 JOIN vendors ON vendors.ID_Vendors = items.FID_Vendor
@@ -19,57 +19,20 @@ try {
 } catch (PDOException $ex) {
     echo $ex->GetMessage();
 }
-?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Items by Price Range</title>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-        }
-        th {
-            background-color: #d4d4d4;
-        }
-    </style>
-</head>
-<body>
+header('Content-Type: text/xml');
+echo '<?xml version="1.0" encoding="UTF-8"?>';
+echo '<items>'; 
 
-<h2>Items in Price Range <?php echo $minPrice; ?> - <?php echo $maxPrice; ?></h2>
+foreach ($res as $row) {
+    echo '<item>';
+    echo '<name>' . $row['name'] . '</name>';
+    echo '<price>' . $row['price'] . '</price>';
+    echo '<quantity>' . $row['quantity'] . '</quantity>';
+    echo '<quality>' . $row['quality'] . '</quality>';
+    echo '<vendor>' . $row['vendor'] . '</vendor>';
+    echo '<category>' . $row['category'] . '</category>';
+    echo '</item>';
+}
 
-<table>
-    <thead>
-        <tr>
-        <th>Name</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Quality</th>
-            <th>Vendor</th>
-            <th>Category</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($res as $row): ?>
-            <tr>
-                <td><?php echo $row['name']; ?></td>
-                <td><?php echo $row['price']; ?></td>
-                <td><?php echo $row['quantity']; ?></td>
-                <td><?php echo $row['quality']; ?></td>
-                <td><?php echo $row['vendor']; ?></td>
-                <td><?php echo $row['category']; ?></td>
-            </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
-
-</body>
-</html>
+echo '</items>'; 

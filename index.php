@@ -56,7 +56,7 @@
       <input type="submit" value="Submit">
     </form>
 
-    <form id="priceForm">
+    <form id="priceForm" onsubmit="sendData(event, 'priceForm', 'price.php')">
         <h2>Price range</h2>
         <?php
             $SELECT = "SELECT MIN(price), MAX(price) FROM items;";
